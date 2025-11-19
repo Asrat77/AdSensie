@@ -1,0 +1,13 @@
+<div id="toast_container" class="fixed bottom-4 right-4 z-50">
+  <div class="bg-gray-900 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in-up"
+       data-controller="removal"
+       data-action="animationend->removal#remove">
+    <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+    </svg>
+    <div>
+      <h4 class="font-semibold">Notification</h4>
+      <p class="text-sm text-gray-300"><%= local_assigns[:message] || "Operation completed." %></p>
+    </div>
+  </div>
+</div>

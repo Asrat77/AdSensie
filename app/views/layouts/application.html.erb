@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "AdSensie - Telegram Analytics for Ad Placement" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+      .turbo-progress-bar {
+        background-color: #4f46e5; /* indigo-600 */
+        height: 3px;
+      }
+    </style>
+  </head>
+
+  <body class="bg-gray-50">
+    <% if user_signed_in? %>
+      <!-- Navigation -->
+      <nav class="bg-white shadow-sm border-b border-gray-200 fixed top-0 w-full z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between h-16">
+            <div class="flex">
+              <!-- Logo -->
+              <div class="flex-shrink-0 flex items-center">
+                <%= link_to root_path, class: "text-2xl font-bold text-indigo-600" do %>
+                  📊 AdSensie
+                <% end %>
+              </div>
+              
+              <!-- Navigation Links -->
+              <div class="hidden sm:ml-8 sm:flex sm:space-x-8">
+                <%= link_to "Dashboard", dashboard_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(dashboard_path) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} text-sm font-medium" %>
+                <%= link_to "Channels", channels_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(channels_path) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} text-sm font-medium" %>
+                <%= link_to "Collections", collections_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(collections_path) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} text-sm font-medium" %>
+              </div>
+            </div>
+            
+            <!-- User Menu -->
+            <div class="flex items-center">
+              <span class="text-sm text-gray-700 mr-4"><%= current_user.email %></span>
+              <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-sm text-gray-700 hover:text-gray-900" %>
+            </div>
+          </div>
+        </div>
+      </nav>
+
+      <!-- Flash Messages -->
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-20">
+        <% if notice %>
+          <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+            <p class="text-green-700"><%= notice %></p>
+          </div>
+        <% end %>
+        <% if alert %>
+          <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+            <p class="text-red-700"><%= alert %></p>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Main Content -->
+      <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <%= yield %>
+      </main>
+    <% else %>
+      <!-- Auth Pages (Login/Signup) -->
+      <main class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <%= yield %>
+      </main>
+    <% end %>
+  </body>
+</html>
