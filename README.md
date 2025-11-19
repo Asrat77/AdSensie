@@ -2,6 +2,8 @@
 <img width="100" height="100" alt="AdSensie" src="https://github.com/user-attachments/assets/43b1b5d1-a62c-4334-90a5-44fd89f4f718" />
 </div>
 
+
+
 A Rails-based analytics platform to help advertisers identify the best Telegram channels for ad placement through data-driven metrics.
 
 ## 🎯 Features
