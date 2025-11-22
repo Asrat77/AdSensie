@@ -12,9 +12,12 @@ Rails.application.routes.draw do
   get "performance", to: "performance#index"
   
   # Channels
-  resources :channels, only: [:index, :show] do
+  resources :channels, only: [:index, :show, :new, :create] do
     collection do
       get :compare
+    end
+    member do
+      post :add_to_collection
     end
   end
   

@@ -46,6 +46,49 @@ class ChannelsController < ApplicationController
     @collections = current_user.collections
   end
 
+  def new
+  end
+
+  def create
+    username = params[:username]
+    
+    if username.blank?
+      flash.now[:alert] = "Please enter a Telegram username"
+      render :new, status: :unprocessable_entity
+      return
+    end
+    
+    # Ensure username starts with @
+    username = "@#{username}" unless username.start_with?('@')
+    
+    result = TelegramService.import_channel(username)
+    
+    if result[:success]
+      redirect_to channel_path(result[:channel]), notice: "Channel successfully added!"
+    else
+      flash.now[:alert] = "Failed to add channel: #{result[:error]}"
+      render :new, status: :unprocessable_entity
+    end
+  end
+
+  def add_to_collection
+    @channel = Channel.find(params[:id])
+    
+    unless params[:collection_id].present?
+      redirect_to @channel, alert: "Please select a collection"
+      return
+    end
+    
+    collection = current_user.collections.find(params[:collection_id])
+    
+    if collection.channels.include?(@channel)
+      redirect_to @channel, alert: "Channel is already in #{collection.name}"
+    else
+      collection.collection_channels.create(channel: @channel)
+      redirect_to @channel, notice: "Channel added to #{collection.name}"
+    end
+  end
+
   def compare
     if params[:channel_ids].present?
       @channels = Channel.where(id: params[:channel_ids])
