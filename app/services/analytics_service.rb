@@ -66,7 +66,7 @@ class AnalyticsService
       FROM channels_analytics
     SQL
     
-    result = execute_clickhouse(query).first
+    result = execute_clickhouse(query).first || {}
     {
       total_channels: result['total_channels'].to_i,
       avg_engagement: result['avg_engagement'].to_f

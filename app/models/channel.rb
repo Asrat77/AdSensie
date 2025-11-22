@@ -42,9 +42,19 @@ class Channel < ApplicationRecord
   def calculate_metrics
     return if posts.empty?
 
+    # Calculate avg_views first
+    current_avg_views = posts.average(:views).to_i
+    
+    # Calculate engagement rate using the new avg_views
+    current_engagement_rate = if subscriber_count.zero?
+                                0
+                              else
+                                ((current_avg_views.to_f / subscriber_count) * 100).round(2)
+                              end
+
     update(
-      avg_views: posts.average(:views).to_i,
-      avg_engagement_rate: engagement_rate,
+      avg_views: current_avg_views,
+      avg_engagement_rate: current_engagement_rate,
       post_frequency: calculate_post_frequency
     )
   end

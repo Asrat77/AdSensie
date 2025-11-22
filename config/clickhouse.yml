@@ -3,7 +3,7 @@ development:
   host: localhost
   port: 8123
   database: adsensie_analytics
-  username: default
+  username: adsensie
   password: 
   
 test:

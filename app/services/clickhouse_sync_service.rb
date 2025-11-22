@@ -21,13 +21,13 @@ class ClickhouseSyncService
       end.join(',')
       
       sql = <<~SQL
-        INSERT INTO channels_analytics 
+        INSERT INTO adsensie_analytics.channels_analytics 
         (id, telegram_id, username, title, subscriber_count, avg_views, avg_engagement_rate, 
          growth_rate, post_frequency, created_at, updated_at)
         VALUES #{values}
       SQL
       
-      Clickhouse::Base.connection.execute(sql)
+      execute_clickhouse(sql)
     end
     
     Rails.logger.info "Synced #{Channel.count} channels"
@@ -47,12 +47,12 @@ class ClickhouseSyncService
       end.join(',')
       
       sql = <<~SQL
-        INSERT INTO posts_analytics 
+        INSERT INTO adsensie_analytics.posts_analytics 
         (id, channel_id, telegram_message_id, views, forwards, replies, posted_at, created_at)
         VALUES #{values}
       SQL
       
-      Clickhouse::Base.connection.execute(sql)
+      execute_clickhouse(sql)
     end
     
     Rails.logger.info "Synced #{Post.count} posts"
@@ -62,6 +62,19 @@ class ClickhouseSyncService
   
   def self.escape_sql(string)
     return '' if string.nil?
-    string.to_s.gsub("'", "''")
+    string.to_s.gsub("'", "''").gsub('"', '\"')
+  end
+
+  def self.execute_clickhouse(query)
+    # Use docker exec to run clickhouse-client
+    # We use the adsensie user we created
+    command = "docker exec clickhouse-server clickhouse-client --user adsensie --query \"#{query.gsub('"', '\"')}\""
+    
+    output = `#{command}`
+    
+    unless $?.success?
+      Rails.logger.error "ClickHouse query failed: #{output}"
+      raise "ClickHouse query failed"
+    end
   end
 end

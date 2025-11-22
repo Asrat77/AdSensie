@@ -18,6 +18,9 @@ class TelegramSyncJob < ApplicationJob
     if success
       Rails.logger.info "Telegram Sync Job completed successfully."
       
+      # Sync to ClickHouse
+      ClickhouseSyncService.sync_all
+      
       # Broadcast finish state (Sync Now) + Toast
       Turbo::StreamsChannel.broadcast_replace_to(
         "dashboard_sync",
