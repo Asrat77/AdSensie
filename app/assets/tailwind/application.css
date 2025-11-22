@@ -1,1 +1,69 @@
 @import "tailwindcss";
+
+@theme {
+  --color-brand-lime: #CDFF00;
+  --color-brand-navy: #1E2A4A;
+  --color-brand-navy-light: #2A3B66;
+  --color-brand-navy-dark: #151E35;
+  --color-brand-dark: #0F172A;
+
+  --color-accent-purple: #8B5CF6;
+  --color-accent-blue: #3B82F6;
+  --color-accent-teal: #14B8A6;
+
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-slow: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-brand-navy text-white hover:bg-brand-navy-light transition-all duration-200 shadow-lg hover:shadow-brand-navy/20;
+  }
+
+  .btn-accent {
+    @apply bg-brand-lime text-brand-navy font-semibold hover:bg-white hover:text-brand-navy transition-all duration-200 shadow-lg hover:shadow-brand-lime/20;
+  }
+
+  .card-premium {
+    @apply bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-xl hover:border-brand-lime/30 transition-all duration-300;
+  }
+
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+
+  .nav-link {
+    @apply text-gray-600 hover:text-brand-navy font-medium transition-colors duration-200 relative;
+  }
+
+  .nav-link.active {
+    @apply text-brand-navy;
+  }
+
+  .nav-link.active::after {
+    content: '';
+    @apply absolute bottom-0 left-0 w-full h-0.5 bg-brand-lime rounded-full;
+  }
+}
+
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+  }
+}

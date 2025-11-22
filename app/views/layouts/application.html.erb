@@ -10,9 +10,8 @@
 
     <%= yield :head %>
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <link rel="icon" href="/images/logo-icon.png" type="image/png">
+    <link rel="apple-touch-icon" href="/images/logo-icon.png">
 
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
@@ -30,29 +29,45 @@
   <body class="bg-gray-50">
     <% if user_signed_in? %>
       <!-- Navigation -->
-      <nav class="bg-white shadow-sm border-b border-gray-200 fixed top-0 w-full z-10">
+      <nav class="bg-white/90 backdrop-blur-md shadow-sm border-b border-gray-200 fixed top-0 w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex justify-between h-16">
+          <div class="flex justify-between h-20">
             <div class="flex">
               <!-- Logo -->
               <div class="flex-shrink-0 flex items-center">
-                <%= link_to root_path, class: "text-2xl font-bold text-indigo-600" do %>
-                  📊 AdSensie
+                <%= link_to root_path, class: "group flex items-center gap-3" do %>
+                  <%= image_tag "AdSensie.png", alt: "AdSensie", class: "h-10 w-auto transition-transform duration-300 group-hover:scale-105" %>
                 <% end %>
               </div>
               
               <!-- Navigation Links -->
-              <div class="hidden sm:ml-8 sm:flex sm:space-x-8">
-                <%= link_to "Dashboard", dashboard_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(dashboard_path) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} text-sm font-medium" %>
-                <%= link_to "Channels", channels_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(channels_path) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} text-sm font-medium" %>
-                <%= link_to "Collections", collections_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(collections_path) ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'} text-sm font-medium" %>
+              <div class="hidden sm:ml-10 sm:flex sm:space-x-8">
+                <%= link_to dashboard_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(dashboard_path) ? 'border-brand-lime text-brand-navy' : 'border-transparent text-gray-500 hover:text-brand-navy hover:border-gray-300'} text-sm font-medium transition-all duration-200 h-full" do %>
+                  <span class="mr-2">📊</span> Dashboard
+                <% end %>
+                
+                <%= link_to channels_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(channels_path) ? 'border-brand-lime text-brand-navy' : 'border-transparent text-gray-500 hover:text-brand-navy hover:border-gray-300'} text-sm font-medium transition-all duration-200 h-full" do %>
+                  <span class="mr-2">📺</span> Channels
+                <% end %>
+                
+                <%= link_to collections_path, class: "inline-flex items-center px-1 pt-1 border-b-2 #{current_page?(collections_path) ? 'border-brand-lime text-brand-navy' : 'border-transparent text-gray-500 hover:text-brand-navy hover:border-gray-300'} text-sm font-medium transition-all duration-200 h-full" do %>
+                  <span class="mr-2">📁</span> Collections
+                <% end %>
               </div>
             </div>
             
             <!-- User Menu -->
-            <div class="flex items-center">
-              <span class="text-sm text-gray-700 mr-4"><%= current_user.email %></span>
-              <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: "text-sm text-gray-700 hover:text-gray-900" %>
+            <div class="flex items-center gap-4">
+              <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-gray-50 rounded-full border border-gray-200">
+                <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                <span class="text-xs font-medium text-gray-600"><%= current_user.email %></span>
+              </div>
+              
+              <%= button_to destroy_user_session_path, method: :delete, class: "text-gray-500 hover:text-red-600 transition-colors p-2 rounded-full hover:bg-red-50" do %>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
+                </svg>
+              <% end %>
             </div>
           </div>
         </div>
